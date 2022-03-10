@@ -79,16 +79,16 @@ class Quaternion:
         return Quaternion(np.cos(rad / 2), x*s, y*s, z*s)
 
     def to_euler_angles(self):
-        pitch = np.arcsin(2 * self.__dict__[1] * self.__dict__[2] + 2 * self.__dict__[0] * self.__dict__[3])
-        if np.abs(self.__dict__[1] * self.__dict__[2] + self.__dict__[3] * self.__dict__[0] - 0.5) < 1e-8:
+        pitch = np.arcsin(2 * self._q[1] * self._q[2] + 2 * self._q[0] * self._q[3])
+        if np.abs(self._q[1] * self._q[2] + self._q[3] * self._q[0] - 0.5) < 1e-8:
             roll = 0
-            yaw = 2 * np.arctan2(self.__dict__[1], self.__dict__[0])
-        elif np.abs(self.__dict__[1] * self.__dict__[2] + self.__dict__[3] * self.__dict__[0] + 0.5) < 1e-8:
-            roll = -2 * np.arctan2(self.__dict__[1], self.__dict__[0])
+            yaw = 2 * np.arctan2(self._q[1], self._q[0])
+        elif np.abs(self._q[1] * self._q[2] + self._q[3] * self._q[0] + 0.5) < 1e-8:
+            roll = -2 * np.arctan2(self._q[1], self._q[0])
             yaw = 0
         else:
-            roll = np.arctan2(2 * self.__dict__[0] * self.__dict__[1] - 2 * self.__dict__[2] * self.__dict__[3], 1 - 2 * self.__dict__[1] ** 2 - 2 * self.__dict__[3] ** 2)
-            yaw = np.arctan2(2 * self.__dict__[0] * self.__dict__[2] - 2 * self.__dict__[1] * self.__dict__[3], 1 - 2 * self.__dict__[2] ** 2 - 2 * self.__dict__[3] ** 2)
+            roll = np.arctan2(2 * self._q[0] * self._q[1] - 2 * self._q[2] * self._q[3], 1 - 2 * self._q[1] ** 2 - 2 * self._q[3] ** 2)
+            yaw = np.arctan2(2 * self._q[0] * self._q[2] - 2 * self._q[1] * self._q[3], 1 - 2 * self._q[2] ** 2 - 2 * self._q[3] ** 2)
         return roll, pitch, yaw
 
     def to_euler123(self):
@@ -144,3 +144,7 @@ class Quaternion:
 
     def __array__(self):
         return self._q
+
+
+
+
