@@ -18,6 +18,7 @@
 
 import numpy as np
 import numbers
+import math
 
 
 class Quaternion:
@@ -90,6 +91,22 @@ class Quaternion:
             roll = np.arctan2(2 * self._q[0] * self._q[1] - 2 * self._q[2] * self._q[3], 1 - 2 * self._q[1] ** 2 - 2 * self._q[3] ** 2)
             yaw = np.arctan2(2 * self._q[0] * self._q[2] - 2 * self._q[1] * self._q[3], 1 - 2 * self._q[2] ** 2 - 2 * self._q[3] ** 2)
         return roll, pitch, yaw
+
+    def my_euler_angles(self):
+        """
+        Returns the Euler angles (roll, pitch, yaw) of the quaternion. (from matlab)
+        :return: roll, pitch, yaw
+        """
+        R_1_1 = 2 * self._q[0]**2 - 1 + 2 * self._q[1]**2
+        R_2_1 = 2 * self._q[1] * self._q[2] - 2 * self._q[0] * self._q[3]
+        R_3_1 = 2 * self._q[1] * self._q[3] + 2 * self._q[0] * self._q[2]
+        R_3_2 = 2 * self._q[2] * self._q[3] - 2 * self._q[0] * self._q[1]
+        R_3_3 = 2 * self._q[0]**2 - 1 + 2 * self._q[3]**2
+
+        phi = math.atan2(R_3_2, R_3_3)
+        theta = math.atan(R_3_1/ math.sqrt(1 - R_3_1**2))
+        psi = math.atan2(R_2_1, R_1_1)
+        return phi, theta, psi # in radians
 
     def to_euler123(self):
         roll = np.arctan2(-2 * (self.__dict__[2] * self.__dict__[3] - self.__dict__[0] * self.__dict__[1]), self.__dict__[0] ** 2 - self.__dict__[1] ** 2 - self.__dict__[2] ** 2 + self.__dict__[3] ** 2)
